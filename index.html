@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Puzzle</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background-image: url("assets/brown-wood-texture-abstract-background-empty-template-julien.jpg");
+            background-size: 100%;
+        }
+
+        .puzzle {
+            display: flex;
+            flex-wrap: wrap;
+            width: 400px;
+            height: 400px;
+            justify-content: end;
+            align-items: center;
+
+        }
+
+        .karıstır {
+            justify-self: end;
+            align-self: center;
+        }
+
+        button {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="puzzle">
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_0.png"
+                alt="0"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_1.png"
+                alt="1"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_2.png"
+                alt="2"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_3.png"
+                alt="3"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_4.png"
+                alt="4"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_5.png"
+                alt="5"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_6.png"
+                alt="6"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_7.png"
+                alt="7"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_8.png"
+                alt="8"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;" src="assets/piece_9.png"
+                alt="9"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_10.png" alt="10"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_11.png" alt="11"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_12.png" alt="12"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_13.png" alt="13"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_14.png" alt="14"></button>
+        <button class="puzzle-parca" onclick="swapButton.call(this)"><img style="width: 100px;"
+                src="assets/piece_15.png" alt="15"></button>
+    </div>
+    <div class="puzzle"><button class="button-3" role="button" onclick="karistir()">Karıştır</button></div>
+    <script>
+        class Node {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+            }
+        }
+
+        class LinkedList {
+            constructor() {
+                this.head = null;
+                this.tail = null;
+                this.length = 0;
+            }
+
+            add(value) {
+                const node = new Node(value);
+
+                if (!this.head) {
+                    this.head = node;
+                    this.tail = node;
+                } else {
+                    this.tail.next = node;
+                    this.tail = node;
+                }
+
+                this.length++;
+            }
+
+            find(value) {
+                let node = this.head;
+
+                while (node) {
+                    if (node.value === value) {
+                        return node;
+                    }
+
+                    node = node.next;
+                }
+
+                return null;
+            }
+
+            move(value) {
+                const node = this.find(value);
+
+                if (!node) {
+                    return;
+                }
+
+                if (node === this.head) {
+                    this.head = node.next;
+                } else {
+                    let prev = this.head;
+
+                    while (prev.next !== node) {
+                        prev = prev.next;
+                    }
+
+                    prev.next = node.next;
+
+                    if (node === this.tail) {
+                        this.tail = prev;
+                    }
+                }
+
+                node.next = null;
+                this.tail.next = node;
+                this.tail = node;
+            }
+
+            print() {
+                let node = this.head;
+                const values = [];
+
+                while (node) {
+                    values.push(node.value);
+                    node = node.next;
+                }
+
+                console.log(values);
+            }
+        }
+
+        const list = new LinkedList();
+
+        for (let i = 0; i <= 15; i++) {
+            list.add(i);
+        }
+        list.print();
+
+        var selectedButton1 = null;
+        var selectedButton2 = null;
+        function swapButton() {
+            if (selectedButton1 != null && selectedButton2 != null) {
+                var button1 = selectedButton1;
+                var button2 = selectedButton2;
+                var button1Parent = button1.parentNode;
+                var button2Parent = button2.parentNode;
+                var button1NextSibling = button1.nextSibling;
+                var button2NextSibling = button2.nextSibling;
+
+                // Switch positions
+                button1Parent.insertBefore(button2, button1NextSibling);
+                button2Parent.insertBefore(button1, button2NextSibling);
+
+                // Reset selections
+                selectedButton1 = null;
+                selectedButton2 = null;
+            } else {
+                if (selectedButton1 == null) {
+                    selectedButton1 = this;
+                } else if (selectedButton2 == null) {
+                    selectedButton2 = this;
+                }
+            }
+        }
+        function karistir() {
+            var puzzleParcalari = document.querySelectorAll(".puzzle-parca");
+            var randomIndex, temp;
+
+            for (var i = puzzleParcalari.length - 1; i > 0; i--) {
+                randomIndex = Math.floor(Math.random() * (i + 1));
+                temp = puzzleParcalari[i].innerHTML;
+                puzzleParcalari[i].innerHTML = puzzleParcalari[randomIndex].innerHTML;
+                puzzleParcalari[randomIndex].innerHTML = temp;
+            }
+            list.print();
+        }
+
+    </script>
+</body>
+
+</html>
